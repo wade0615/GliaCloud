@@ -30,7 +30,7 @@ function App() {
       content:
         "We're no strangers to love\nYou know the rules and so do I\nA full commitment's what I'm thinking of\nYou wouldn't get this from any other guy",
       timestamp: "00:18",
-      clipLength: 17,
+      clipLength: 16,
       lighlight: false,
     },
     {
@@ -38,7 +38,7 @@ function App() {
       content:
         "I just wanna tell you how I'm feeling\nGotta make you understand",
       timestamp: "00:35",
-      clipLength: 8,
+      clipLength: 7,
       lighlight: false,
     },
     {
@@ -46,7 +46,7 @@ function App() {
       content:
         "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you",
       timestamp: "00:43",
-      clipLength: 17,
+      clipLength: 16,
       lighlight: false,
     },
     {
@@ -54,7 +54,7 @@ function App() {
       content:
         "We've known each other for so long\nYour heart's been aching, but you're too shy to say it\nInside, we both know what's been going on\nWe know the game and we're gonna play it",
       timestamp: "01:00",
-      clipLength: 17,
+      clipLength: 16,
       lighlight: false,
     },
     {
@@ -62,7 +62,7 @@ function App() {
       content:
         "And if you ask me how I'm feeling\nDon't tell me you're too blind to see",
       timestamp: "01:17",
-      clipLength: 8,
+      clipLength: 7,
       lighlight: false,
     },
     {
@@ -70,7 +70,7 @@ function App() {
       content:
         "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you(Again)",
       timestamp: "01:25",
-      clipLength: 43,
+      clipLength: 42,
       lighlight: false,
     },
     {
@@ -78,7 +78,7 @@ function App() {
       content:
         "Never gonna give, never gonna give\n(Give you up)\nNever gonna give, never gonna give\n(Give you up)",
       timestamp: "02:08",
-      clipLength: 8,
+      clipLength: 7,
       lighlight: false,
     },
     {
@@ -86,7 +86,7 @@ function App() {
       content:
         "We've known each other for so long\nYour heart's been aching, but you're too shy to say it\nInside, we both know what's been going on\nWe know the game and we're gonna play it",
       timestamp: "02:16",
-      clipLength: 17,
+      clipLength: 16,
       lighlight: false,
     },
     {
@@ -94,7 +94,7 @@ function App() {
       content:
         "I just wanna tell you how I'm feeling\nGotta make you understand",
       timestamp: "02:33",
-      clipLength: 8,
+      clipLength: 7,
       lighlight: false,
     },
     {
@@ -102,7 +102,7 @@ function App() {
       content:
         "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you(Again)",
       timestamp: "02:41",
-      clipLength: 34,
+      clipLength: 33,
       lighlight: false,
     },
     {
@@ -110,7 +110,7 @@ function App() {
       content:
         "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you",
       timestamp: "03:15",
-      clipLength: 17,
+      clipLength: 16,
       lighlight: false,
     },
   ]);
@@ -154,6 +154,44 @@ function App() {
     setCurrentTime(timeInSeconds); // 設定影片跳轉的時間
     playerRef.current.seekTo(timeInSeconds);
     setVideoPlay(true); // 確保影片播放
+  };
+
+  // 處理影片流暢地在所有被 hightlight 的段落之間播放
+  const handlePlaySmoothInHightlightSection = (playedSeconds) => {
+    const highlightSections = videoSection.filter(
+      (section) => section.lighlight
+    );
+
+    if (highlightSections.length > 0) {
+      const currentSection = highlightSections.find((section) => {
+        const [minutes, seconds] = section.timestamp.split(":").map(Number);
+        const timeInSeconds = minutes * 60 + seconds;
+        return (
+          playedSeconds >= timeInSeconds &&
+          playedSeconds < timeInSeconds + section.clipLength
+        );
+      });
+
+      if (!currentSection) {
+        // 如果不在任何段落內，找到下一個有被 highlight 的段落
+        const nextSection = highlightSections.find((section) => {
+          const [minutes, seconds] = section.timestamp.split(":").map(Number);
+          const timeInSeconds = minutes * 60 + seconds;
+          return playedSeconds < timeInSeconds;
+        });
+        if (nextSection) {
+          const [minutes, seconds] = nextSection.timestamp
+            .split(":")
+            .map(Number);
+          const timeInSeconds = minutes * 60 + seconds;
+          playerRef.current.seekTo(timeInSeconds);
+          setCurrentTime(timeInSeconds);
+        } else {
+          // 如果沒有下一個段落，則暫停影片
+          setVideoPlay(false);
+        }
+      }
+    }
   };
 
   return (
@@ -217,7 +255,7 @@ function App() {
               <Card style={{ marginBottom: "1rem" }}>
                 <ReactPlayer
                   ref={playerRef}
-                  url="https://www.youtube.com/watch?v=dQw4w9WgXcQ" // 影片 URL
+                  url={videoData.url}
                   controls
                   playing={videoPlay}
                   width="100%"
@@ -228,6 +266,7 @@ function App() {
                   }}
                   onProgress={({ playedSeconds }) => {
                     setCurrentTime(playedSeconds); // 更新當前播放時間
+                    handlePlaySmoothInHightlightSection(playedSeconds); // 播放 hightlight 的段落
                   }}
                   config={{
                     youtube: {
@@ -238,6 +277,9 @@ function App() {
                   }}
                 />
               </Card>
+              <Typography variant="h5" gutterBottom>
+                {videoData.title}
+              </Typography>
               <Button
                 variant="contained"
                 color="primary"
