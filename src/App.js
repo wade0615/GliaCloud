@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import ReactPlayer from "react-player";
 import "./App.scss";
 import { Container, Typography, Box, Button, Grid, Card } from "@mui/material";
@@ -6,106 +6,12 @@ import { Container, Typography, Box, Button, Grid, Card } from "@mui/material";
 function App() {
   const [videoPlay, setVideoPlay] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [videoData, setVideoData] = useState({
-    title: "Rick Astley - Never Gonna Give You Up",
-    description:
-      "Rick Astley - Never Gonna Give You Up (Video) (Official Music Video) | Rick Astley - Never Gonna Give You Up (Video) (Official Music Video)",
-    thumbnail: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
-    duration: 213, // 假設影片長度為 180 秒
-    url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  });
-  const [videoSection, setVideoSection] = useState([
-    {
-      title: "Intro 前奏",
-      content:
-        "We're no strangers to love\nYou know the rules and so do I\nA full commitment's what I'm thinking of\nYou wouldn't get this from any other guy",
-      timestamp: "00:18",
-      clipLength: 16,
-      lighlight: false,
-    },
-    {
-      title: "Pre-Chorus 過門",
-      content:
-        "I just wanna tell you how I'm feeling\nGotta make you understand",
-      timestamp: "00:35",
-      clipLength: 7,
-      lighlight: false,
-    },
-    {
-      title: "Chorus 副歌",
-      content:
-        "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you",
-      timestamp: "00:43",
-      clipLength: 16,
-      lighlight: false,
-    },
-    {
-      title: "Verse 1 主歌一",
-      content:
-        "We've known each other for so long\nYour heart's been aching, but you're too shy to say it\nInside, we both know what's been going on\nWe know the game and we're gonna play it",
-      timestamp: "01:00",
-      clipLength: 16,
-      lighlight: false,
-    },
-    {
-      title: "Pre-Chorus 過門",
-      content:
-        "And if you ask me how I'm feeling\nDon't tell me you're too blind to see",
-      timestamp: "01:17",
-      clipLength: 7,
-      lighlight: false,
-    },
-    {
-      title: "Chorus 副歌",
-      content:
-        "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you(Again)",
-      timestamp: "01:25",
-      clipLength: 42,
-      lighlight: false,
-    },
-    {
-      title: "Bridge 間奏",
-      content:
-        "Never gonna give, never gonna give\n(Give you up)\nNever gonna give, never gonna give\n(Give you up)",
-      timestamp: "02:08",
-      clipLength: 7,
-      lighlight: false,
-    },
-    {
-      title: "Verse 2 主歌二",
-      content:
-        "We've known each other for so long\nYour heart's been aching, but you're too shy to say it\nInside, we both know what's been going on\nWe know the game and we're gonna play it",
-      timestamp: "02:16",
-      clipLength: 16,
-      lighlight: false,
-    },
-    {
-      title: "Pre-Chorus 過門",
-      content:
-        "I just wanna tell you how I'm feeling\nGotta make you understand",
-      timestamp: "02:33",
-      clipLength: 7,
-      lighlight: false,
-    },
-    {
-      title: "Chorus 副歌",
-      content:
-        "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you(Again)",
-      timestamp: "02:41",
-      clipLength: 33,
-      lighlight: false,
-    },
-    {
-      title: "Final Chorus 最終副歌",
-      content:
-        "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you",
-      timestamp: "03:15",
-      clipLength: 16,
-      lighlight: false,
-    },
-  ]);
+  const [videoData, setVideoData] = useState(null);
+  const [videoSection, setVideoSection] = useState([]);
+  const [isButtonVisible, setIsButtonVisible] = useState(false);
 
   const playerRef = useRef();
+  const buttonRef = useRef();
 
   // Submit 按鈕按下後，模擬使用 axios 送出一隻等待 0.5s 的 api 並得到回傳結果的 function
   const handleSubmit = async () => {
@@ -122,9 +28,103 @@ function App() {
     //     console.error("There was an error!", error);
     //   });
     setVideoData({
-      ...videoData,
+      title: "Rick Astley - Never Gonna Give You Up",
+      description:
+        "Rick Astley - Never Gonna Give You Up (Video) (Official Music Video) | Rick Astley - Never Gonna Give You Up (Video) (Official Music Video)",
+      thumbnail: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+      duration: 213, // 假設影片長度為 180 秒
       url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     });
+    setVideoSection([
+      {
+        title: "Intro 前奏",
+        content:
+          "We're no strangers to love\nYou know the rules and so do I\nA full commitment's what I'm thinking of\nYou wouldn't get this from any other guy",
+        timestamp: "00:18",
+        clipLength: 16,
+        lighlight: false,
+      },
+      {
+        title: "Pre-Chorus 過門",
+        content:
+          "I just wanna tell you how I'm feeling\nGotta make you understand",
+        timestamp: "00:35",
+        clipLength: 7,
+        lighlight: false,
+      },
+      {
+        title: "Chorus 副歌",
+        content:
+          "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you",
+        timestamp: "00:43",
+        clipLength: 16,
+        lighlight: true,
+      },
+      {
+        title: "Verse 1 主歌一",
+        content:
+          "We've known each other for so long\nYour heart's been aching, but you're too shy to say it\nInside, we both know what's been going on\nWe know the game and we're gonna play it",
+        timestamp: "01:00",
+        clipLength: 16,
+        lighlight: false,
+      },
+      {
+        title: "Pre-Chorus 過門",
+        content:
+          "And if you ask me how I'm feeling\nDon't tell me you're too blind to see",
+        timestamp: "01:17",
+        clipLength: 7,
+        lighlight: true,
+      },
+      {
+        title: "Chorus 副歌",
+        content:
+          "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you(Again)",
+        timestamp: "01:25",
+        clipLength: 42,
+        lighlight: false,
+      },
+      {
+        title: "Bridge 間奏",
+        content:
+          "Never gonna give, never gonna give\n(Give you up)\nNever gonna give, never gonna give\n(Give you up)",
+        timestamp: "02:08",
+        clipLength: 7,
+        lighlight: false,
+      },
+      {
+        title: "Verse 2 主歌二",
+        content:
+          "We've known each other for so long\nYour heart's been aching, but you're too shy to say it\nInside, we both know what's been going on\nWe know the game and we're gonna play it",
+        timestamp: "02:16",
+        clipLength: 16,
+        lighlight: true,
+      },
+      {
+        title: "Pre-Chorus 過門",
+        content:
+          "I just wanna tell you how I'm feeling\nGotta make you understand",
+        timestamp: "02:33",
+        clipLength: 7,
+        lighlight: false,
+      },
+      {
+        title: "Chorus 副歌",
+        content:
+          "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you(Again)",
+        timestamp: "02:41",
+        clipLength: 33,
+        lighlight: false,
+      },
+      {
+        title: "Final Chorus 最終副歌",
+        content:
+          "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you\nNever gonna make you cry\nNever gonna say goodbye\nNever gonna tell a lie and hurt you",
+        timestamp: "03:15",
+        clipLength: 16,
+        lighlight: false,
+      },
+    ]);
   };
 
   /** 播放/暫停影片的 function */
@@ -202,6 +202,34 @@ function App() {
     }
   };
 
+  // 使用 Intersection Observer 監控按鈕是否出現在畫面中
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsButtonVisible(entry.isIntersecting); // 更新按鈕是否可見的狀態
+      },
+      { threshold: 0.1 } // 當按鈕至少有 10% 出現在畫面中時觸發
+    );
+
+    if (buttonRef.current) {
+      observer.observe(buttonRef.current); // 監控按鈕
+    }
+
+    // 監聽滾動事件
+    const handleScroll = () => {
+      if (buttonRef.current) {
+        observer.observe(buttonRef.current); // 重新監控按鈕
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll); // 清除滾動事件監聽器
+      if (buttonRef.current) {
+        observer.unobserve(buttonRef.current); // 停止監控按鈕
+      }
+    };
+  }, []);
+
   return (
     <section id="video-highlight-tool">
       <Container maxWidth="xl">
@@ -236,111 +264,136 @@ function App() {
 
         <hr />
 
-        <Grid container spacing={2}>
-          {/* Left Content */}
-          <Grid item xs={12} md={6}>
-            {videoSection.map((section, index) => (
-              <Box
-                key={index}
-                my={4}
-                onClick={() => handleSectionClick(index, section.timestamp)} // 點擊段落時觸發
-                id={`section-box-${index}`}
-                className={`section-box ${
-                  section.lighlight ? "section-box-active" : ""
-                }`}
-              >
-                <Typography variant="h5" gutterBottom>
-                  {section.title}
-                </Typography>
-                <Typography variant="caption">{section.timestamp}</Typography>
-                <Typography variant="body1">{section.content}</Typography>
-              </Box>
-            ))}
-          </Grid>
-
-          {/* Right Video Section */}
-          <Grid item xs={12} md={6} className="video-container">
-            <Box className="video-box">
-              <Card style={{ marginBottom: "1rem" }}>
-                <ReactPlayer
-                  ref={playerRef}
-                  url={videoData.url}
-                  controls
-                  playing={videoPlay}
-                  width="100%"
-                  height="400px"
-                  onReady={(player) => {
-                    // 當影片準備好時，跳轉到指定時間
-                    // player.seekTo(currentTime, "seconds");
-                  }}
-                  onProgress={({ playedSeconds }) => {
-                    setCurrentTime(playedSeconds); // 更新當前播放時間
-                    handlePlaySmoothInHightlightSection(playedSeconds); // 播放 hightlight 的段落
-                  }}
-                  config={{
-                    youtube: {
-                      playerVars: {
-                        start: currentTime,
+        {videoData && (
+          <Grid container spacing={2} direction={{ md: "row-reverse" }}>
+            {/* Top Right Video Section */}
+            <Grid item xs={12} md={6} className="video-container">
+              <Box className="video-box">
+                <Card style={{ marginBottom: "1rem" }}>
+                  <ReactPlayer
+                    ref={playerRef}
+                    url={videoData.url}
+                    controls
+                    playing={videoPlay}
+                    width="100%"
+                    height="400px"
+                    onReady={(player) => {
+                      // 當影片準備好時，開始播放
+                      player.seekTo(currentTime); // 設定當前播放時間
+                      setVideoPlay(true); // 更新播放狀態
+                    }}
+                    onProgress={({ playedSeconds }) => {
+                      setCurrentTime(playedSeconds); // 更新當前播放時間
+                      handlePlaySmoothInHightlightSection(playedSeconds); // 播放 hightlight 的段落
+                    }}
+                    config={{
+                      youtube: {
+                        playerVars: {
+                          start: currentTime,
+                        },
                       },
-                    },
+                    }}
+                  />
+                </Card>
+                <Typography variant="h5" gutterBottom>
+                  {videoData.title}
+                </Typography>
+                <Grid
+                  container
+                  direction="row"
+                  sx={{
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "1rem",
                   }}
-                />
-              </Card>
-              <Typography variant="h5" gutterBottom>
-                {videoData.title}
-              </Typography>
-              <Grid
-                container
-                direction="row"
-                sx={{
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: "1rem",
+                >
+                  <Button
+                    ref={buttonRef}
+                    variant="contained"
+                    color="primary"
+                    onClick={handlePlayPause}
+                  >
+                    {videoPlay ? "Pause" : "Play"}
+                  </Button>
+                  <span>{Math.floor(currentTime)}s</span>
+                </Grid>
+                <Box className="progress-bar">
+                  <Box
+                    className="progress-bar-fill"
+                    sx={{
+                      width: `${(currentTime / videoData.duration) * 100}%`,
+                    }}
+                  ></Box>
+                  {videoSection.map((section, index) => {
+                    if (section.lighlight) {
+                      const [minutes, seconds] = section.timestamp
+                        .split(":")
+                        .map(Number);
+                      const timeInSeconds = minutes * 60 + seconds;
+                      return (
+                        <Box
+                          key={index}
+                          className="progress-bar-highlight"
+                          sx={{
+                            left: `${
+                              (timeInSeconds / videoData.duration) * 100
+                            }%`,
+                            width: `${
+                              (section.clipLength / videoData.duration) * 100
+                            }%`,
+                          }}
+                        ></Box>
+                      );
+                    }
+                    return null;
+                  })}
+                </Box>
+              </Box>
+            </Grid>
+            {/* Bottom Left Content */}
+            <Grid item xs={12} md={6}>
+              {videoSection.map((section, index) => (
+                <Box
+                  key={index}
+                  my={4}
+                  onClick={() => handleSectionClick(index, section.timestamp)} // 點擊段落時觸發
+                  id={`section-box-${index}`}
+                  className={`section-box ${
+                    section.lighlight ? "section-box-active" : ""
+                  }`}
+                >
+                  <Typography variant="h5" gutterBottom>
+                    {section.title}
+                  </Typography>
+                  <Typography variant="caption">{section.timestamp}</Typography>
+                  <Typography variant="body1">{section.content}</Typography>
+                </Box>
+              ))}
+            </Grid>
+
+            {/* Floating Play/Pause Button */}
+            <Grid
+              item
+              xs={12}
+              className="floating-button"
+              sx={{
+                display: { md: "none" },
+              }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handlePlayPause}
+                style={{
+                  display: isButtonVisible ? "none" : "block", // 如果按鈕可見，隱藏這個 Grid
                 }}
               >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handlePlayPause}
-                >
-                  {videoPlay ? "Pause" : "Play"}
-                </Button>
+                {videoPlay ? "Pause" : "Play"}
                 <span>{Math.floor(currentTime)}s</span>
-              </Grid>
-              <Box className="progress-bar">
-                <Box
-                  className="progress-bar-fill"
-                  sx={{
-                    width: `${(currentTime / videoData.duration) * 100}%`,
-                  }}
-                ></Box>
-                {videoSection.map((section, index) => {
-                  if (section.lighlight) {
-                    const [minutes, seconds] = section.timestamp
-                      .split(":")
-                      .map(Number);
-                    const timeInSeconds = minutes * 60 + seconds;
-                    return (
-                      <Box
-                        key={index}
-                        className="progress-bar-highlight"
-                        sx={{
-                          left: `${
-                            (timeInSeconds / videoData.duration) * 100
-                          }%`,
-                          width: `${
-                            (section.clipLength / videoData.duration) * 100
-                          }%`,
-                        }}
-                      ></Box>
-                    );
-                  }
-                  return null;
-                })}
-              </Box>
-            </Box>
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </Container>
     </section>
   );
