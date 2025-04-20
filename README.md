@@ -1,70 +1,58 @@
-# Getting Started with Create React App
+# GliaCloud 前端面試作業
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 專案簡介
 
-## Available Scripts
+此專案為 GliaCloud 前端面試作業，基於 [Create React App](https://github.com/facebook/create-react-app) 建立，旨在展示候選人對 React 技術的掌握程度及前端開發能力。
 
-In the project directory, you can run:
+## 功能描述
 
-### `npm start`
+- **基本功能**：實現指定的功能需求，展示候選人對 React 組件、狀態管理及事件處理的理解。
+- **響應式設計**：確保應用在不同裝置上的良好顯示效果。
+- **程式碼品質**：遵循最佳實踐，確保程式碼可讀性與可維護性。
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 安裝與操作手冊
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 環境需求
 
-### `npm test`
+- Node.js 20.16
+- npm 10.0.1
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 安裝步驟
 
-### `npm run build`
+1. 克隆專案到本地：
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   ```bash
+   git clone https://github.com/wade0615/GliaCloud.git
+   cd glia-cloud
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. 安裝依賴：
+   ```bash
+   npm install
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 可用指令
 
-### `npm run eject`
+在專案目錄中，您可以執行以下指令：
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### `npm run start`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+啟動開發伺服器。\
+開啟 [http://localhost:3000](http://localhost:3000) 在瀏覽器中查看。
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### `npm test`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+啟動測試執行器，進行互動式測試。
 
-## Learn More
+#### `npm run build`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+將應用程式打包為生產模式，輸出至 `build` 資料夾。
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### `npm run lint`
 
-### Code Splitting
+檢查程式碼是否符合規範。
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 部署
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. 確保已執行 `npm run build`，生成生產模式的檔案。
+2. 將 `build` 資料夾中的內容上傳至您的伺服器或部署平台（如 Vercel、Netlify）。
