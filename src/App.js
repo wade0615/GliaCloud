@@ -156,7 +156,7 @@ function App() {
     setVideoPlay(true); // 確保影片播放
   };
 
-  // 處理影片流暢地在所有被 hightlight 的段落之間播放
+  // 處理影片流暢地在所有被 highlight 的段落之間播放
   const handlePlaySmoothInHightlightSection = (playedSeconds) => {
     const highlightSections = videoSection.filter(
       (section) => section.lighlight
@@ -171,6 +171,20 @@ function App() {
           playedSeconds < timeInSeconds + section.clipLength
         );
       });
+
+      // 字幕區滾動到當前播放段落
+      if (currentSection) {
+        // 找到當前播放段落的 index
+        const currentSectionIndex = videoSection.findIndex(
+          (section) => section.timestamp === currentSection.timestamp
+        );
+
+        document
+          .getElementById(`section-box-${currentSectionIndex}`)
+          .scrollIntoView({
+            behavior: "smooth",
+          });
+      }
 
       if (!currentSection) {
         // 如果不在任何段落內，找到下一個有被 highlight 的段落
@@ -236,6 +250,7 @@ function App() {
                 key={index}
                 my={4}
                 onClick={() => handleSectionClick(index, section.timestamp)} // 點擊段落時觸發
+                id={`section-box-${index}`}
                 className={`section-box ${
                   section.lighlight ? "section-box-active" : ""
                 }`}
