@@ -295,15 +295,24 @@ function App() {
               <Typography variant="h5" gutterBottom>
                 {videoData.title}
               </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ marginLeft: "10px", marginBottom: "1rem" }}
-                onClick={handlePlayPause}
+              <Grid
+                container
+                direction="row"
+                sx={{
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "1rem",
+                }}
               >
-                {videoPlay ? "Pause" : "Play"}
-              </Button>
-              <span>{Math.floor(currentTime)}s</span>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handlePlayPause}
+                >
+                  {videoPlay ? "Pause" : "Play"}
+                </Button>
+                <span>{Math.floor(currentTime)}s</span>
+              </Grid>
               <Box className="progress-bar">
                 <Box
                   className="progress-bar-fill"
