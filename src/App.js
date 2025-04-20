@@ -1,17 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import ReactPlayer from "react-player";
 import "./App.scss";
-import {
-  Container,
-  Typography,
-  Box,
-  List,
-  ListItem,
-  ListItemText,
-  Button,
-  Grid,
-  Card,
-} from "@mui/material";
+import { Container, Typography, Box, Button, Grid, Card } from "@mui/material";
 
 function App() {
   const [videoPlay, setVideoPlay] = useState(false);
@@ -131,6 +121,10 @@ function App() {
     //   .catch(error => {
     //     console.error("There was an error!", error);
     //   });
+    setVideoData({
+      ...videoData,
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    });
   };
 
   /** 播放/暫停影片的 function */
