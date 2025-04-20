@@ -222,10 +222,11 @@ function App() {
       }
     };
     window.addEventListener("scroll", handleScroll);
+    const currentButtonRef = buttonRef.current; // 複製 buttonRef.current 的值
     return () => {
       window.removeEventListener("scroll", handleScroll); // 清除滾動事件監聽器
-      if (buttonRef.current) {
-        observer.unobserve(buttonRef.current); // 停止監控按鈕
+      if (currentButtonRef) {
+        observer.unobserve(currentButtonRef); // 停止監控按鈕
       }
     };
   }, []);
